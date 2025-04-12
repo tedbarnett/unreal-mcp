@@ -1,4 +1,9 @@
 ---
+description: 
+globs: 
+alwaysApply: false
+---
+---
 description: Apply this rule for any MCP Tool call for the Unreal Engine editor
 globs: 
 alwaysApply: false

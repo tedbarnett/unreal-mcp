@@ -83,30 +83,38 @@ def send_command(command: str, params: Dict[str, Any]) -> Optional[Dict[str, Any
         logger.error(f"Error sending command: {e}")
         return None
 
-def create_test_cube(name: str, location: list[float]) -> Optional[Dict[str, Any]]:
-    """Create a test cube actor with the specified name and location.
+def create_test_cube(base_name: str, location: list[float]) -> dict:
+    """Create a test cube actor with a unique name and location using the spawn_actor command.
     
     Args:
-        name: The name to give the cube actor
+        base_name: The base name to give the cube actor
         location: The [x, y, z] world location to spawn at
         
     Returns:
-        Optional[Dict[str, Any]]: The response from the create command, or None if failed
+        dict: The response from the spawn_actor command
     """
+    # Generate a unique name
+    unique_name = base_name
+    suffix = 1
+    while get_actor_properties(unique_name):
+        unique_name = f"{base_name}_{suffix}"
+        suffix += 1
+    
     cube_params = {
-        "name": name,
+        "name": unique_name,
         "type": "StaticMeshActor",
         "location": location,
         "rotation": [0.0, 0.0, 0.0],
         "scale": [1.0, 1.0, 1.0]
     }
     
-    response = send_command("create_actor", cube_params)
+    logger.info(f"Command payload: {json.dumps(cube_params)}")
+    response = send_command("spawn_actor", cube_params)
     if not response or response.get("status") != "success":
         logger.error(f"Failed to create cube: {response}")
         return None
         
-    logger.info(f"Created cube '{name}' successfully at location {location}")
+    logger.info(f"Created cube '{unique_name}' successfully at location {location}")
     return response
 
 def get_actor_properties(name: str) -> Optional[Dict[str, Any]]:
@@ -200,4 +208,4 @@ def main():
         sys.exit(1)
 
 if __name__ == "__main__":
-    main() 
+    main()
