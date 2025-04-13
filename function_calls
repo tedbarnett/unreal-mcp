@@ -1,0 +1,5 @@
+<invoke name="mcp_unrealMCP_spawn_actor">
+<parameter name="name">WanderingCube</parameter>
+<parameter name="type">StaticMeshActor</parameter>
+<parameter name="location">[0, 0, 100]</parameter>
+</invoke> 
